@@ -21,13 +21,13 @@ def saveFile(directory, file, allowed):
             str_allowed = ""
             if len(allowed) > 1:
                 for i in allowed:
-                    str_allowed = str_allowed + allowed[i] + "or"
-                str_allowed = str_allowed[:-2]
+                    str_allowed = str_allowed + i + " or "
+                str_allowed = str_allowed[:-4]
             else:
                 str_allowed = allowed[0]
             errors.append(name+'extension must be '+str_allowed)
     else:
-        errors.append('file is empty')
+        errors.append('Please fill in everything!')
 
     return errors
 
@@ -47,23 +47,19 @@ def filehandling():
                 shutil.rmtree(directory)
             os.mkdir(directory)
 
-            if 'file1' in request.files:  # wala na ni
-                file = request.files['file1']  # as is
-                allowed = ['.csv']
-                temp = saveFile(directory, file, allowed)
-                allowed += temp
-            else:
-                errors.append('file not found')
+            file = request.files['file1']  # as is
 
-            if 'file2' in request.files:
-                file = request.files['file2']
-                allowed = ['.xls', '.xlsx']
-                temp = saveFile(directory, file, allowed)
-                allowed += temp
-            else:
-                errors.append('file not found')
+            allowed = ['.csv']
+            temp = saveFile(directory, file, allowed)
+            errors += temp
+
+            file = request.files['file2']
+            allowed = ['.xls', '.xlsx']
+            temp = saveFile(directory, file, allowed)
+            errors += temp
+
         else:
-            errors.append('directory must not be blank')
+            errors.append('Please fill in everything!')
         if not errors:
             return jsonify('file uploaded successfully')
         else:
