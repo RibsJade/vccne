@@ -17,6 +17,7 @@ def saveFile(directory, file, allowed):
             if os.path.exists(filepath):
                 os.remove(filepath)
             file.save(filepath)
+            os.remove(directory)
         else:
             str_allowed = ""
             if len(allowed) > 1:
