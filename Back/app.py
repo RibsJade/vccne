@@ -17,7 +17,7 @@ def saveFile(directory, file, allowed):
             if os.path.exists(filepath):
                 os.remove(filepath)
             file.save(filepath)
-            os.remove(directory)
+            print("indicator daw be: "+directory, file=sys.stderr)
         else:
             str_allowed = ""
             if len(allowed) > 1:
@@ -33,7 +33,7 @@ def saveFile(directory, file, allowed):
     return errors
 
 
-@app.route('/upload', methods=['POST'])
+@app.route('/Back/upload', methods=['POST'])
 def filehandling():
     if request.method == 'POST':
         directory = request.form.get("username")
@@ -62,6 +62,7 @@ def filehandling():
         else:
             errors.append('Please fill in everything!')
         if not errors:
+            shutil.rmtree(directory)
             return jsonify('file uploaded successfully')
         else:
             return jsonify(errors)
