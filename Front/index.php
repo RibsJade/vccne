@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    <form action="http://127.0.0.1:5000/Back/upload" method="post" enctype="multipart/form-data">
+    <form action="http://192.168.1.8/Back/upload" method="post" enctype="multipart/form-data">
         Username: <input type='text' name='username' /><BR>
         Choose csv file: <input type="file" name="file1" accept='.csv' /><BR>
         Choose excel file: <input type="file" name="file2" accept='.xls, .xlsx' /><BR>
