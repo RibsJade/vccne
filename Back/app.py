@@ -58,27 +58,14 @@ def filehandling():
             allowed = ['.xls', '.xlsx']
             temp = saveFile(directory, file, allowed)
             errors += temp
-
+            print(temp, file=sys.stderr)
         else:
             errors.append('Please fill in everything!')
+        shutil.rmtree(directory)
         if not errors:
-            shutil.rmtree(directory)
             return jsonify('file uploaded successfully')
         else:
             return jsonify(errors)
-    else:
-        return jsonify('hello')
-    # filepath = os.path.join(directory, filename)
-    # mylist = []
-    # if not os.path.exists(filepath):
-    #     data = open(filepath, "w")
-    #     data.close()
-    # with open(filepath) as file:
-    #     data = csv.reader(file, delimiter='\t')
-    #     for row in data:
-    #         mylist.append(row)
-
-    # return jsonify(mylist)
 
 
 if __name__ == "__main__":
