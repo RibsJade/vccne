@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 
 def saveFile(directory, file, allowed):
-    errors = []
+    message = None
     if file.filename != '':
         name, fileext = os.path.splitext(file.filename)
         if fileext.lower() in allowed:
@@ -17,7 +17,6 @@ def saveFile(directory, file, allowed):
             if os.path.exists(filepath):
                 os.remove(filepath)
             file.save(filepath)
-            print("indicator daw be: "+directory, file=sys.stderr)
         else:
             str_allowed = ""
             if len(allowed) > 1:
@@ -26,11 +25,11 @@ def saveFile(directory, file, allowed):
                 str_allowed = str_allowed[:-4]
             else:
                 str_allowed = allowed[0]
-            errors.append(name+'extension must be '+str_allowed)
+            message = name+'extension must be '+str_allowed
     else:
-        errors.append('Please fill in everything!')
+        message = 'Please fill in everything!'
 
-    return errors
+    return message
 
 
 @app.route('/Back/upload', methods=['POST'])
@@ -38,11 +37,11 @@ def filehandling():
     if request.method == 'POST':
         directory = request.form.get("username")
 
-        if not os.path.isdir("users"):
-            os.mkdir("users")
-
-        errors = []
+        message = []
         if directory != "":
+            if not os.path.isdir("users"):
+                os.mkdir("users")
+
             directory = os.path.join("users", directory)
             if os.path.isdir(directory):
                 shutil.rmtree(directory)
@@ -52,20 +51,20 @@ def filehandling():
 
             allowed = ['.csv']
             temp = saveFile(directory, file, allowed)
-            errors += temp
+            if temp not in message:
+                message.append(temp)
 
             file = request.files['file2']
             allowed = ['.xls', '.xlsx']
             temp = saveFile(directory, file, allowed)
-            errors += temp
-            print(temp, file=sys.stderr)
+            if temp not in message:
+                message.append(temp)
+            shutil.rmtree(directory)
         else:
-            errors.append('Please fill in everything!')
-        shutil.rmtree(directory)
-        if not errors:
-            return jsonify('file uploaded successfully')
-        else:
-            return jsonify(errors)
+            message.append('Please fill in everything!')
+        if not message:
+            message.append('file uploaded successfully')
+        return jsonify(message)
 
 
 if __name__ == "__main__":
