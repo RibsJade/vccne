@@ -25,7 +25,7 @@ def saveFile(directory, file, allowed):
                 str_allowed = str_allowed[:-4]
             else:
                 str_allowed = allowed[0]
-            message = name+'extension must be '+str_allowed
+            message = name+' extension must be '+str_allowed
     else:
         message = 'Please fill in everything!'
 
@@ -51,14 +51,16 @@ def filehandling():
 
             allowed = ['.csv']
             temp = saveFile(directory, file, allowed)
-            if temp not in message:
-                message.append(temp)
+            if temp is not None:
+                if temp not in message:
+                    message.append(temp)
 
             file = request.files['file2']
             allowed = ['.xls', '.xlsx']
             temp = saveFile(directory, file, allowed)
-            if temp not in message:
-                message.append(temp)
+            if temp is not None:
+                if temp not in message:
+                    message.append(temp)
             shutil.rmtree(directory)
         else:
             message.append('Please fill in everything!')
