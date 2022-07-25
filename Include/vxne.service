@@ -1,1 +1,13 @@
-/etc/systemd/system/vxne.service
+[Unit]
+Description=Vaccine service
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/vxne.com/Back
+ExecStart=python3 app.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
